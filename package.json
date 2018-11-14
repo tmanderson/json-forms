@@ -1,0 +1,42 @@
+{
+  "name": "@tmanderson/json-forms",
+  "version": "0.1.0",
+  "description": "",
+  "main": "dist/index.js",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.6.0",
+    "babel-register": "^6.26.0",
+    "chai": "^4.1.2",
+    "chalk": "^2.1.0",
+    "circular-json": "^0.5.5",
+    "eslint-import-resolver-babel-module": "^4.0.0",
+    "eslint-plugin-import": "^2.14.0",
+    "expect.js": "^0.3.1",
+    "jest": "^23.6.0",
+    "mocha": "^3.5.0",
+    "moment": "^2.19.2",
+    "pegjs": "^0.10.0",
+    "webpack": "^3.11.0"
+  },
+  "scripts": {
+    "start": "node -r babel-register -r babel-polyfill ./src/repl",
+    "jest": "node -r babel-register -r babel-polyfill ./node_modules/.bin/jest",
+    "build": "npm run parser:build && webpack --config webpack.config.js",
+    "parser:build": "pegjs -o ./src/parser/index.js ./src/parser/grammar.pegjs",
+    "test": "mocha"
+  },
+  "author": "Mitch Anderson",
+  "license": "ISC",
+  "@std/esm": {
+    "esm": "all"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  }
+}

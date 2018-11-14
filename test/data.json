@@ -1,0 +1,80 @@
+{
+  "users": [
+    {
+      "gender": "female",
+      "age": 21,
+      "name": {
+        "title": "miss",
+        "first": "clémentine",
+        "last": "riviere"
+      },
+      "location": {
+        "street": "8056 rue louis-blanqui",
+        "city": "poitiers",
+        "state": "puy-de-dôme",
+        "postcode": 21682
+      },
+      "email": "clémentine.riviere@example.com",
+      "login": {
+        "username": "silvergorilla949",
+        "password": "484848",
+        "salt": "ZxgExmbK",
+        "md5": "2bc7333307a0eddbdc51a9443cad6677",
+        "sha1": "f9853ad0dac564f713e5e871ed2ff4f943ba6964",
+        "sha256": "b481444eae05d372c07126ecfc31460520b2a396e4aae4a0b7b37d5fa70aece5"
+      },
+      "dob": "1984-01-08 22:10:59",
+      "registered": "2004-02-27 14:30:08",
+      "phone": "05-95-67-55-84",
+      "cell": "06-71-07-62-98",
+      "id": {
+        "name": "INSEE",
+        "value": "284004188986 76"
+      },
+      "picture": {
+        "large": "https://randomuser.me/api/portraits/women/36.jpg",
+        "medium": "https://randomuser.me/api/portraits/med/women/36.jpg",
+        "thumbnail": "https://randomuser.me/api/portraits/thumb/women/36.jpg"
+      },
+      "nat": "FR"
+    },
+    {
+      "gender": "female",
+      "age": 42,
+      "name": {
+        "title": "miss",
+        "first": "clémentine",
+        "last": "riviere"
+      },
+      "location": {
+        "street": "8056 rue louis-blanqui",
+        "city": "poitiers",
+        "state": "puy-de-dôme",
+        "postcode": 21682
+      },
+      "email": "clémentine.riviere@example.com",
+      "login": {
+        "username": "silvergorilla949",
+        "password": "484848",
+        "salt": "ZxgExmbK",
+        "md5": "2bc7333307a0eddbdc51a9443cad6677",
+        "sha1": "f9853ad0dac564f713e5e871ed2ff4f943ba6964",
+        "sha256": "b481444eae05d372c07126ecfc31460520b2a396e4aae4a0b7b37d5fa70aece5"
+      },
+      "dob": "1984-01-08 22:10:59",
+      "registered": "2004-02-27 14:30:08",
+      "phone": "05-95-67-55-84",
+      "cell": "06-71-07-62-98",
+      "id": {
+        "name": "INSEE",
+        "value": "284004188986 76"
+      },
+      "picture": {
+        "large": "https://randomuser.me/api/portraits/women/36.jpg",
+        "medium": "https://randomuser.me/api/portraits/med/women/36.jpg",
+        "thumbnail": "https://randomuser.me/api/portraits/thumb/women/36.jpg"
+      },
+      "nat": "FR"
+    }
+  ]
+}

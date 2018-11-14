@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>HJSON</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" type="text/css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/json.min.js"></script>
+  <style>
+    html, body, main {
+      padding: 10px;
+      height: 100vh;
+      margin: 0;
+      padding: 0;
+      width: 100vw;
+    }
+    body {
+      display: flex;
+      flex-direction: column;
+      max-height: 100vh;
+    }
+
+    main {
+      flex: 0 1 auto;
+      display: flex;
+      flex-direction: row;
+      justify-content: stretch;
+      flex-wrap: nowrap;
+    }
+
+    main > div {
+      flex: 0 1 auto;
+      display: flex;
+      flex-direction: column;
+      flex-wrap: nowrap;
+      width: 50%;
+    }
+
+    h2 {
+      font-size: 18px;
+      margin: 1em 0 1em 0.2em;
+      line-height: 1.2em;
+    }
+
+    main > div > textarea {
+      flex: 0 1 auto;
+      border: 0;
+      font-family: monospace;
+      font-size: 16px;
+      height: 100%;
+    }
+
+    textarea:first-child {
+      border-top: 1px solid;
+      border-right: 1px solid;
+    }
+    textarea:last-child {
+      border-top: 1px solid;
+      border-left: 1px solid;
+    }
+    body > div {
+      flex: 0 1 auto;
+      border-top: 1px solid;
+      height: 40vh;
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+    }
+    body > div > pre {
+      font-family: monospace;
+      font-size: 16px;
+      margin: 0;
+      padding: 0 10px;
+      width: 100vw;
+      overflow: scroll;
+    }
+  </style>
+  <script src="/dist/index.js"></script>
+</head>
+<body>
+  <main>
+    <div>
+      <h2>Model</h2>
+      <textarea></textarea>
+    </div>
+    <div>
+      <h2>Form</h2>
+      <textarea></textarea>
+    </div>
+  </main>
+  <div>
+    <h2>Output</h2>
+    <pre>
+      <code class="json"></code>
+    </pre>
+  </div>
+  <script type="text/javascript">
+    var { exec, compileToJSON } = HJSON;
+    var model = document.querySelector('main > div:first-child > textarea');
+    var input = document.querySelector('main > div:last-child > textarea');
+    var output = document.querySelector('body > div > pre > code');
+
+    var state = {
+      model: localStorage.getItem('modelValue'),
+      form: localStorage.getItem('formValue'),
+      output: null
+    };
+
+    model.value = state.model;
+    input.value = state.form;
+
+    document.body.addEventListener('keydown', handleKey, true);
+    document.body.addEventListener('blur', handleBlur, true);
+    function handleKey(e) {
+      var v;
+      var val = e.target.value;
+      var pos = [e.target.selectionStart, e.target.selectionEnd];
+
+      switch(e.key) {
+        case 'Tab':
+          e.preventDefault();
+          if (pos[1] - pos[0] > 1 && !e.shiftKey) {
+            v = val.substr(pos[0], pos[1]).split('\n')
+              .map(function(line) {
+                return `  ${line}`;
+              }, '').join('\n');
+            e.target.value = val.substring(0, pos[0]) + v + val.substring(pos[1]);
+          } else if(pos[1] - pos[0] > 1 && e.shiftKey) {
+            v = val.substr(pos[0], pos[1]).split('\n')
+              .map(function(line) { return line.replace(/^  /g, ''); }).join('\n');
+            e.target.value = val.substring(0, pos[0]) + v + val.substring(pos[1]);
+          } else {
+            e.target.value = val.substring(0, pos[0]) + '  ' + val.substring(pos[1]);
+            e.target.selectionStart = e.target.selectionEnd = pos[0] + 2;
+          }
+        break;
+        case 'Backspace':
+          if (e.target.value.slice(e.target.selectionStart - 2, 2) === '  ') {
+            e.preventDefault();
+            e.target.value = val.substring(0, pos[0] - 2) + val.substring(pos[1]);
+            e.target.selectionStart = e.target.selectionEnd = pos[0] - 2;
+          }
+        break;
+        case '{':
+          e.preventDefault();
+          e.target.value = val.substring(0, pos[0]) + '{}' + val.substring(pos[1]);
+          e.target.selectionStart = e.target.selectionEnd = pos[0] + 1;
+        break;
+      }
+    }
+
+    function handleBlur(e) {
+      try { eval(`q = ${e.target.value}`); e.target.value = JSON.stringify(q, null, 2); }
+      catch(e){}
+    }
+
+    model.addEventListener('input', function(e) {
+      var q;
+      handleKey(e);
+      try { eval(`q = ${e.target.value}`) }
+      catch(e){ q = null; }
+      if (q === undefined) return;
+      localStorage.setItem('modelValue', JSON.stringify(q, null, 2));
+      state.model = localStorage.getItem('modelValue');
+    });
+
+    input.addEventListener('input', function(e) {
+      var q;
+      handleKey(e);
+      try { q = compileToJSON(e.target.value); }
+      catch(e) { console.error(e) }
+      console.log(q);
+      if (q === undefined) return;
+      localStorage.setItem('formValue', JSON.stringify(q, null, 2));
+      state.form = localStorage.getItem('formValue');
+      state.output = JSON.stringify(exec(q, JSON.parse(state.model)), null, 2);
+      output.innerHTML = state.output;
+    });
+
+    try {
+      if (state.form && state.model) {
+        state.output = JSON.stringify(exec(JSON.parse(state.form), JSON.parse(state.model)), null, 2);
+      }
+    } catch(e) {}
+    output.innerHTML = state.output;
+  </script>
+  <script>hljs.initHighlightingOnLoad();</script>
+</body>
+</html>

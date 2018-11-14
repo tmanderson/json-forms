@@ -1,0 +1,12 @@
+node_modules
+.DS_Store
+.history
+.env
+*.pem
+*.md
+
+api/data
+
+!README.md
+!CONTRIBUTING.md
+!docs/*.md
